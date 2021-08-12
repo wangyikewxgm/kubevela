@@ -156,7 +156,7 @@ jobs:
           helm package $VELA_RUNTIME_ROLLOUT_HELM_CHART --destination $LOCAL_OSS_DIRECTORY
           helm repo index --url https://$BUCKET.$ENDPOINT/core $LOCAL_OSS_DIRECTORY
           ls -R $LOCAL_OSS_DIRECTORY
-          cat index.yaml
+          cat $LOCAL_OSS_DIRECTORY/index.yaml
       - name: sync local to cloud
         run: ./ossutil --config-file .ossutilconfig sync $LOCAL_OSS_DIRECTORY oss://$BUCKET/core -f
 
