@@ -252,6 +252,7 @@ var _ = Describe("rollout related e2e-test,rollout trait test", func() {
 		}, 30*time.Second, 300*time.Millisecond).Should(BeNil())
 		// check rollout paused in partition 0
 		time.Sleep(5 * time.Second)
+		targerDeploy := new(v1.Deployment)
 		Eventually(func() error {
 			rolloutKey := types.NamespacedName{Namespace: namespaceName, Name: componentName}
 			if err := k8sClient.Get(ctx, rolloutKey, &rollout); err != nil {
@@ -266,8 +267,8 @@ var _ = Describe("rollout related e2e-test,rollout trait test", func() {
 			if rollout.Status.CurrentBatch != 0 {
 				return fmt.Errorf("current batchPartition missmatch accutally %d", rollout.Status.CurrentBatch)
 			}
-			deployKey := types.NamespacedName{Namespace: namespaceName, Name: compRevName}
-			if err := k8sClient.Get(ctx, deployKey, &targerDeploy); err != nil {
+			deployKey := types.NamespacedName{Namespace: namespaceName, Name: rollout.Spec.TargetRevisionName}
+			if err := k8sClient.Get(ctx, deployKey, targerDeploy); err != nil {
 				return err
 			}
 			if *targerDeploy.Spec.Replicas != 2 {
