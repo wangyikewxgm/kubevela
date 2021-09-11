@@ -18,6 +18,7 @@ package oam
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -56,6 +57,7 @@ func (p *provider) ApplyComponent(ctx wfContext.Context, v *value.Value, act wfT
 		return err
 	}
 	patcher, _ := v.LookupValue("patch")
+	fmt.Println(patcher.String())
 	workload, traits, healthy, err := p.apply(comp, patcher)
 	if err != nil {
 		return err

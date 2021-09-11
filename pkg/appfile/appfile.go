@@ -482,6 +482,7 @@ func baseGenerateComponent(pCtx process.Context, wl *Workload, appName, ns strin
 			}
 		}
 		for _, aux := range auxiliaries {
+			fmt.Printf(patcher.String())
 			if p, err := patcher.LookupValue("traits", aux.Name); err == nil {
 				pi, err := model.NewOther(p.CueValue())
 				if err != nil {
@@ -490,6 +491,8 @@ func baseGenerateComponent(pCtx process.Context, wl *Workload, appName, ns strin
 				if err := aux.Ins.Unify(pi); err != nil {
 					return nil, errors.WithMessagef(err, "patch outputs.%s", aux.Name)
 				}
+			} else {
+				fmt.Println(err)
 			}
 		}
 	}
