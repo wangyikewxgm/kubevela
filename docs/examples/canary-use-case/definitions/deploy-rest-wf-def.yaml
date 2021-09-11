@@ -1,0 +1,42 @@
+apiVersion: core.oam.dev/v1beta1
+kind: WorkflowStepDefinition
+metadata:
+  name: deploy-rest
+  namespace: vela-system
+spec:
+  schematic:
+    cue:
+      template: |-
+        import ("vela/op")
+
+        parameter: {
+              component?: string
+        }
+
+
+        if parameter.component != _|_ {
+            comp__: parameter.component
+        }
+
+        // if component is empty, use first component
+        if parameter.component == _|_ {
+            comps__ : op.#Load
+            compNames__ : [for name, c in comps__.value {name} ]
+            comp__: compNames__[0]
+        }
+
+        comp__: string
+
+        apply: op.#ApplyRemaining & {
+           exceptions: {
+              comp__: {}
+           }
+        }
+
+
+
+
+
+
+
+
